@@ -19,17 +19,21 @@ module SluggableFinder
       ActiveRecord::Base.extend SluggableFinder::Orm::ClassMethods
       # support for associations
       a = ActiveRecord::Associations
-      returning([ a::AssociationCollection ]) { |classes|
-        # detect http://dev.rubyonrails.org/changeset/9230
-        unless a::HasManyThroughAssociation.superclass == a::HasManyAssociation
-          classes << a::HasManyThroughAssociation
-        end
-      }.each do |klass|
+
+      classes = [ a::AssociationCollection ]
+
+      # detect http://dev.rubyonrails.org/changeset/9230
+      unless a::HasManyThroughAssociation.superclass == a::HasManyAssociation
+        classes << a::HasManyThroughAssociation
+      end
+      
+      classes.each do |klass|
         klass.send :include, SluggableFinder::Finder
         klass.send :include, SluggableFinder::AssociationProxyFinder
         klass.alias_method_chain :find, :slug
       end
       
+      return classes
     end
     
   end

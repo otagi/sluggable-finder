@@ -14,7 +14,7 @@ module SluggableFinder
         end
         
         write_inheritable_attribute(:sluggable_finder_options, {
-          :sluggable_type => ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s,
+          :sluggable_type => self.base_class.name.to_s,
           :from		        =>	field,
         	:scope		      => 	nil,
         	:to			        =>  :slug,
