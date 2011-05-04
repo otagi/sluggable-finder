@@ -17,7 +17,7 @@ module SluggableFinder
           :sluggable_type => self.base_class.name.to_s,
           :from		        =>	field,
         	:scope		      => 	nil,
-        	:to			        =>  :slug,
+        	:to			        =>  SluggableFinder.to || :slug,
         	:reserved_slugs => [],
         	:allow_integer_ids => true,
         	:upcase         => false,

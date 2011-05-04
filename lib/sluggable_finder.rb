@@ -15,6 +15,16 @@ module SluggableFinder
   
   class << self
     
+    @@to = :slug
+
+    def to=(attribute_name)
+      @@to = attribute_name
+    end
+
+    def to
+      @@to
+    end
+
     def enable_activerecord
       ActiveRecord::Base.extend SluggableFinder::Orm::ClassMethods
       # support for associations
