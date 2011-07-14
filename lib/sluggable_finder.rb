@@ -30,8 +30,12 @@ module SluggableFinder
       # support for associations
       a = ActiveRecord::Associations
 
-      classes = [ a::AssociationCollection ]
-
+      if ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR >=1
+        classes = [ a::CollectionAssociation ]
+      else
+        classes = [ a::AssociationCollection ]
+      end
+      
       # detect http://dev.rubyonrails.org/changeset/9230
       unless a::HasManyThroughAssociation.superclass == a::HasManyAssociation
         classes << a::HasManyThroughAssociation
