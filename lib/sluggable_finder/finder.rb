@@ -7,12 +7,9 @@ module SluggableFinder
       if key.is_a?(Symbol) || key.kind_of?(Array) || (key.to_s =~ /\A\d+\Z/ && opts[:allow_integer_ids]) # normal INT find
         find_without_slug(*args)
       else # sluggable find
-        options = {:conditions => ["#{ opts[:to]} = ?", key]}
         error = "There is no #{opts[:sluggable_type]} with #{opts[:to]} '#{key}'"
-        with_scope(:find => options) do
-          find_without_slug(:first) or 
-          raise SluggableFinder.not_found_exception.new(error)
-        end
+        scoped.where(["#{opts[:to]} = ?", key]).first or 
+        raise SluggableFinder.not_found_exception.new(error)
       end
     end
   end

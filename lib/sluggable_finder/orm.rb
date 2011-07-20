@@ -13,7 +13,8 @@ module SluggableFinder
           alias_method_chain :find, :slug
         end
         
-        write_inheritable_attribute(:sluggable_finder_options, {
+        class_attribute :sluggable_finder_options
+        self.sluggable_finder_options = {
           :sluggable_type => self.base_class.name.to_s,
           :from		        =>	field,
         	:scope		      => 	nil,
@@ -22,8 +23,7 @@ module SluggableFinder
         	:allow_integer_ids => true,
         	:upcase         => false,
         	:ignore_sti     => false # if true, Uniqueness won't check sibling classes.
-        }.merge( options ))
-        class_inheritable_reader :sluggable_finder_options
+        }.merge( options )
 
         if sluggable_finder_options[:scope]
           scope_condition_method = %(
